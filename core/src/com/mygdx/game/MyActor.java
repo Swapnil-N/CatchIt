@@ -21,7 +21,7 @@ public class MyActor extends Actor{
     private float timeForHit;
 
     private TextureAtlas textureAtlas;
-    private Sprite sprite = new Sprite(new Texture((Gdx.files.internal("Sprites/baseball.png"))));
+    private Sprite sprite = new Sprite(new Texture((Gdx.files.internal("BallImgs/baseball.png"))));
     private Animation<TextureRegion> animation;
 
     private TextureAtlas collideAtlas;
@@ -39,6 +39,8 @@ public class MyActor extends Actor{
         textureAtlas = new TextureAtlas(Gdx.files.internal("Spritesheets/mySprites.atlas"));
         animation = new Animation<TextureRegion>(1/5f,textureAtlas.getRegions());
 
+        setY(Gdx.graphics.getHeight()-100);
+
         setBounds(x, getY(),sprite.getWidth(),sprite.getHeight());
         sprite.setPosition(x, getY());
 
@@ -48,27 +50,21 @@ public class MyActor extends Actor{
         setTouchable(Touchable.enabled);
     }
 
-
     @Override
     public void draw(Batch batch, float parentAlpha) {
+
         if(!hit ) {
             timeForMove += Gdx.graphics.getDeltaTime();
             batch.draw(animation.getKeyFrame(timeForMove, true), sprite.getX(), sprite.getY());
         }
         else{
-            drawHitAnimation(batch);
+            timeForHit += Gdx.graphics.getDeltaTime();
+            batch.draw(collisionAni.getKeyFrame(timeForHit, true), sprite.getX(), sprite.getY());
+            if(collisionAni.isAnimationFinished(timeForHit)){
+                addAction(Actions.removeActor());
+            }
         }
 
-
-
-    }
-
-    private void drawHitAnimation(Batch bat) {
-        timeForHit += Gdx.graphics.getDeltaTime();
-        bat.draw(collisionAni.getKeyFrame(timeForHit, true), sprite.getX(), sprite.getY());
-        if(collisionAni.isAnimationFinished(timeForHit)){
-            addAction(Actions.removeActor());
-        }
     }
 
     public void act(float delta) {
@@ -95,8 +91,8 @@ public class MyActor extends Actor{
     private void moveSequence() {
         SequenceAction sequenceAction = new SequenceAction();
         MoveToAction move = new MoveToAction();
-        move.setPosition(x, 2000);
-        move.setDuration(7f);
+        move.setPosition(x, 0);
+        move.setDuration(5f);
         sequenceAction.addAction(move);
         sequenceAction.addAction(Actions.removeActor());
         addAction(sequenceAction);

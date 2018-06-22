@@ -15,7 +15,7 @@ public class GloveActor extends Actor{
 
     public GloveActor(){
 
-        setY(1000);
+        setY(50);
         setX((float)(Math.random()*1000));
 
         setBounds(getX(), getY(), sprite.getWidth(), sprite.getHeight());
@@ -36,14 +36,14 @@ public class GloveActor extends Actor{
 
         accelx = Gdx.input.getAccelerometerX();
 
-        if (accelx > 0 && accelx <= 3 && sprite.getX() > 10){
-            setX(getX()-5);
+        if (accelx > 0.3 && accelx <= 3 && sprite.getX() > 10){
+            setX(getX()-8);
         }else if (accelx > 3 && sprite.getX() > 10){
-            setX(getX()-10);
-        }else if (accelx < 0 && accelx >= -3 && sprite.getX() < 900){
-            setX(getX()+5);
+            setX(getX()-14);
+        }else if (accelx < -0.3 && accelx >= -3 && sprite.getX() < Gdx.graphics.getWidth()-getWidth()){
+            setX(getX()+8);
         }else if (accelx < -3 && sprite.getX() < 900){
-            setX(getX()+10);
+            setX(getX()+14);
         }
 
         sprite.setPosition(getX(),getY());
